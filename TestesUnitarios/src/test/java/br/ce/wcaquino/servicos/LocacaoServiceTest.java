@@ -39,6 +39,7 @@ import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.matchers.MatchersProprios;
 import br.ce.wcaquino.utils.DataUtils;
+import buildermaster.BuilderMaster;
 import exceptions.FilmeSemEstoqueException;
 import exceptions.LocadoraException;
 
@@ -127,5 +128,9 @@ public class LocacaoServiceTest {
 		boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
 	
 		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
+	}
+	
+	public static void main(String[] args) {
+		new BuilderMaster().gerarCodigoClasse(Locacao.class);
 	}
 }
