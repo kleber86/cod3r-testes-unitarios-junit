@@ -39,7 +39,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.ce.wcaquino.builders.FilmeBuilder;
 import br.ce.wcaquino.builders.LocacaoBuilder;
@@ -57,9 +60,16 @@ import exceptions.LocadoraException;
 
 public class LocacaoServiceTest {
 	
+	@Mock
 	private SPCService spcService;
+	
+	@Mock
 	private LocacaoDAO dao;
+	
+	@InjectMocks
 	private LocacaoService service;
+	
+	@Mock
 	private EmailService emailService;
 	
 	@Rule
@@ -71,13 +81,7 @@ public class LocacaoServiceTest {
 	
 	@Before
 	public void setup() {
-		service = new LocacaoService();
-		dao =  Mockito.mock(LocacaoDAO.class);
-		service.setLocacaoDAO(dao);
-		spcService = Mockito.mock(SPCService.class);
-		service.setSPCService(spcService);
-		emailService = Mockito.mock(EmailService.class);
-		service.setEmailService(emailService);
+		MockitoAnnotations.initMocks(this);
 	}
 	
 	@SuppressWarnings("deprecation")
