@@ -16,7 +16,12 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -153,7 +158,7 @@ public class LocacaoServiceTest {
 		
 		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
 		
-		when(spcService.possuiNegativacao(usuario)).thenReturn(true);
+		when(spcService.possuiNegativacao(Mockito.any(Usuario.class))).thenReturn(true);
 		
 		try {
 			service.alugarFilme(usuario, filmes);
@@ -167,16 +172,22 @@ public class LocacaoServiceTest {
 	
 	@Test
 	public void deveEnviarEmailParaLocacaoesAtrasadas() {
-		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		Usuario usuario = umUsuario().agora();
+		Usuario usuario2 = umUsuario().comNome("Usuario em dia").agora();
+		Usuario usuario3 = umUsuario().comNome("Outro atrasado").agora();
 		List<Locacao> locacoes = Arrays.asList(
-				umLocacao()
-				.comUsuario(usuario)
-				.comDataRetorno(obterDataComDiferencaDias(-2)).agora());
-		
-		Mockito.when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
+				umLocacao().atrasada().comUsuario(usuario).agora(),
+				umLocacao().comUsuario(usuario2).agora(),
+				umLocacao().atrasada().comUsuario(usuario3).agora(),
+				umLocacao().atrasada().comUsuario(usuario3).agora());
+		when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
 		
 		service.notificarAtrasos();
 		
-		Mockito.verify(emailService).notificarAtraso(usuario);
+		verify(emailService, times(3)).notificarAtraso(Mockito.any(Usuario.class));
+		verify(emailService).notificarAtraso(usuario);
+		verify(emailService, Mockito.atLeastOnce()).notificarAtraso(usuario3);
+		verify(emailService, never()).notificarAtraso(usuario2);
+		verifyNoMoreInteractions(emailService);
 	}
 }
