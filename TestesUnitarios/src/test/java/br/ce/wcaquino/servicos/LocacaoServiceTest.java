@@ -116,7 +116,7 @@ public class LocacaoServiceTest {
 	}
 
 	@Test
-	public void naoDeveAlugarFilmeSemUsuario() throws FilmeSemEstoqueException {
+	public void naoDeveAlugarFilmeSemUsuario() throws Exception {
 		// Cenario
 		List<Filme> filmes =Arrays.asList(umFilme().agora());
 
@@ -130,7 +130,7 @@ public class LocacaoServiceTest {
 	}
 
 	@Test
-	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
+	public void naoDeveAlugarFilmeSemFilme() throws Exception {
 		// Cenario
 		Usuario usuario = umUsuario().agora();
 
@@ -142,7 +142,7 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void deveDevolverNaSegundaAoAlugarNoDomingo() throws FilmeSemEstoqueException, LocadoraException {
+	public void deveDevolverNaSegundaAoAlugarNoDomingo() throws Exception {
 		assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		
 		Usuario usuario = umUsuario().agora();
@@ -156,7 +156,7 @@ public class LocacaoServiceTest {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaNegativadoSPC() throws FilmeSemEstoqueException {
+	public void naoDeveAlugarFilmeParaNegativadoSPC() throws Exception {
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario 2").agora();
 		
@@ -193,5 +193,19 @@ public class LocacaoServiceTest {
 		verify(emailService, Mockito.atLeastOnce()).notificarAtraso(usuario3);
 		verify(emailService, never()).notificarAtraso(usuario2);
 		verifyNoMoreInteractions(emailService);
+	}
+	
+	@Test
+	public void deveTratarErroNoSPC() throws Exception {
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
+		
+		Mockito.when(spcService.possuiNegativacao(usuario))
+		.thenThrow(new Exception("Falha Cadastrofica"));
+		
+		exception.expect(LocadoraException.class);
+		exception.expectMessage("Problema com SPC, tente novamente");
+		
+		service.alugarFilme(usuario, filmes);
 	}
 }

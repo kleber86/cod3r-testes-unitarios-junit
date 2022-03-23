@@ -72,7 +72,7 @@ public class CalculoValorLocacaoTest {
 	}
 	
 	@Test
-	public void deveCalcularValorLocacaoConsiderandoParametros() throws FilmeSemEstoqueException, LocadoraException{
+	public void deveCalcularValorLocacaoConsiderandoParametros() throws Exception{
 		Usuario usuario = new Usuario("Usuario 1");
 		
 		Locacao resultado = service.alugarFilme(usuario, filmes);
