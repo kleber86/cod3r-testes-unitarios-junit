@@ -74,16 +74,20 @@ public class LocacaoServiceTest {
 		Usuario usuario = umUsuario().agora();
 		List<Filme> filmes =Arrays.asList(umFilme().comValor(5.0).agora());
 
-		PowerMockito.whenNew(Date.class).
-				withNoArguments().thenReturn(DataUtils.obterData(23, 3, 2022));
+		//PowerMockito.whenNew(Date.class).
+		//		withNoArguments().thenReturn(DataUtils.obterData(23, 3, 2022));
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, 23);
+		calendar.set(Calendar.MONTH, Calendar.MARCH);
+		calendar.set(Calendar.YEAR, 2022);
 
 		// Ação
 		Locacao locacao = service.alugarFilme(usuario, filmes);
 
 		// Verificação
 		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
-		error.checkThat(locacao.getDataLocacao(), ehHoje());
-		error.checkThat(locacao.getDataRetorno(), ehHojeComDiferencaDias(1));
+		//error.checkThat(locacao.getDataLocacao(), ehHoje());
+		//error.checkThat(locacao.getDataRetorno(), ehHojeComDiferencaDias(1));
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), DataUtils.obterData(23, 3, 2022)), is(true));
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterData(24, 3, 2022)), is(true));
 
