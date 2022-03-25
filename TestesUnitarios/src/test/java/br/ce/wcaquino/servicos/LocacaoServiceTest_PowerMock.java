@@ -7,9 +7,7 @@ import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
 import br.ce.wcaquino.utils.DataUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
@@ -28,6 +26,7 @@ import java.util.List;
 import static br.ce.wcaquino.builders.FilmeBuilder.umFilme;
 import static br.ce.wcaquino.builders.UsuarioBuilder.umUsuario;
 import static br.ce.wcaquino.matchers.MatchersProprios.caiNumaSegunda;
+import static br.ce.wcaquino.servicos.CalculadoraTest.ordem;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -60,8 +59,20 @@ public class LocacaoServiceTest_PowerMock {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		service = PowerMockito.spy(service);
+		System.out.println("Finalizando 4...");
+		ordem.append(4);
 	}
-	
+
+	@After
+	public void tearDown() {
+		System.out.println("Finalizando 4...");
+	}
+
+	@AfterClass
+	public static void tearDownClass(){
+		System.out.println(ordem.toString());
+	}
+
 	@SuppressWarnings("deprecation")
 	@Test
 	public void deveAlugarFilme() throws Exception {

@@ -7,14 +7,12 @@ import br.ce.wcaquino.daos.LocacaoDAO;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
-import br.ce.wcaquino.runners.ParallelRunner;
 import br.ce.wcaquino.utils.DataUtils;
 import exceptions.FilmeSemEstoqueException;
 import exceptions.LocadoraException;
 import org.junit.*;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.*;
 
 import java.lang.reflect.Method;
@@ -32,7 +30,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
-@RunWith(ParallelRunner.class)
+
 public class LocacaoServiceTest {
 	
 	@Mock
@@ -58,11 +56,17 @@ public class LocacaoServiceTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		System.out.println("Iniciando 2");
+		CalculadoraTest.ordem.append(2);
 	}
 
 	@After
 	public void tearDown(){
 		System.out.println("Finalizando 2");
+	}
+
+	@AfterClass
+	public static  void tearDownClass(){
+		System.out.println(CalculadoraTest.ordem.toString());
 	}
 
 	@SuppressWarnings("deprecation")

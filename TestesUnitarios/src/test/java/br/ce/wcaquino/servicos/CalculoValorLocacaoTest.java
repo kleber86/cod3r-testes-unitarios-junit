@@ -1,6 +1,7 @@
 package br.ce.wcaquino.servicos;
 
 import static br.ce.wcaquino.builders.FilmeBuilder.umFilme;
+import static br.ce.wcaquino.servicos.CalculadoraTest.ordem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -8,6 +9,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,8 +52,20 @@ public class CalculoValorLocacaoTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
+		System.out.println("Iniciando 3...");
+		ordem.append(3);
 	}
-	
+
+	@After
+	public void tearDown() {
+		System.out.println("Finalizando 3...");
+	}
+
+	@AfterClass
+	public static void tearDownClass(){
+		System.out.println(ordem.toString());
+	}
+
 	private static Filme filme1 = umFilme().agora();
 	private static Filme filme2 = umFilme().agora();
 	private static Filme filme3 = umFilme().agora();
