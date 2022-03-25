@@ -2,11 +2,15 @@ package br.ce.wcaquino.servicos;
 
 import static org.junit.Assert.assertEquals;
 
+import br.ce.wcaquino.runners.ParallelRunner;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.ce.wcaquino.exceptions.NaoPodeDividirPorZero;
+import org.junit.runner.RunWith;
 
+@RunWith(ParallelRunner.class)
 public class CalculadoraTest {
 	
 	private Calculadora calc;
@@ -14,6 +18,12 @@ public class CalculadoraTest {
 	@Before
 	public void setup() {
 		calc = new Calculadora();
+		System.out.println("Iniciando...");
+	}
+
+	@After
+	public void tearDown(){
+		System.out.println("Finalizando...");
 	}
 
 	@Test
@@ -22,10 +32,10 @@ public class CalculadoraTest {
 		int a = 5;
 		int b = 3;
 		
-		// Ação
+		// Aï¿½ï¿½o
 		int resultado = calc.somar(a, b);
 		
-		// Verificação
+		// Verificaï¿½ï¿½o
 		assertEquals(8, resultado);
 	}
 	
